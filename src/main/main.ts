@@ -1,7 +1,7 @@
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import { execFile, ChildProcess } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
-import { join, dirname, basename } from 'node:path';
+import { join, basename } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import type { AppSettings, OperationResult, ProjectState, UvInfo } from '../shared/types';
 
@@ -50,7 +50,7 @@ function runUv(command: string, args: string[], cwd: string): Promise<OperationR
 function createWindow() {
   mainWindow = new BrowserWindow({ width: 1440, height: 920, minWidth: 1024, minHeight: 680, webPreferences: { preload: join(__dirname, '../preload/preload.js'), contextIsolation: true, sandbox: true, nodeIntegration: false } });
   if (process.env.VITE_DEV_SERVER_URL) mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
-  else mainWindow.loadFile(join(__dirname, '../dist/index.html'));
+  else mainWindow.loadFile(join(app.getAppPath(), 'dist/index.html'));
 }
 
 ipcMain.handle('uv:detect', detectUv);
